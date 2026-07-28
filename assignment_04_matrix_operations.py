@@ -60,3 +60,163 @@
 # YOUR CODE BELOW — remove the # symbols from the scaffold and fill it in
 # =============================================================================
 
+def read_matrix(rows, cols, label=""):
+    """
+    Read a matrix of the given dimensions from the user, row by row.
+    Each row is entered as space-separated values on one line.
+    """
+    matrix = []
+    for i in range(rows):
+        while True:
+            row_input = input(f"Enter row {i + 1}{label}: ")
+            values = row_input.split()
+
+            if len(values) != cols:
+                print(f"Error: Expected {cols} values, got {len(values)}. Try again.")
+                continue
+
+            try:
+                row = [float(v) for v in values]
+                matrix.append(row)
+                break
+            except ValueError:
+                print("Error: Please enter valid numbers only.")
+
+    return matrix
+
+
+def display_matrix(matrix, title="Matrix"):
+    """Print a matrix in a neat, aligned grid format."""
+    print(f"\n{title}:")
+    for row in matrix:
+        formatted_row = "  ".join(f"{value:g}" for value in row)
+        print(formatted_row)
+
+
+def transpose_matrix(matrix):
+    """
+    Return the transpose of a matrix using nested loops.
+    An M x N matrix becomes an N x M matrix.
+    """
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    result = []
+    for j in range(cols):
+        new_row = []
+        for i in range(rows):
+            new_row.append(matrix[i][j])
+        result.append(new_row)
+
+    return result
+
+
+def add_matrices(matrix_a, matrix_b):
+    """
+    Return the element-wise sum of two matrices of the same size,
+    using nested loops.
+    """
+    rows = len(matrix_a)
+    cols = len(matrix_a[0])
+
+    result = []
+    for i in range(rows):
+        new_row = []
+        for j in range(cols):
+            new_row.append(matrix_a[i][j] + matrix_b[i][j])
+        result.append(new_row)
+
+    return result
+
+
+def multiply_matrices(matrix_a, matrix_b):
+    """
+    Return the matrix product A x B using nested loops.
+    A is M x N, B is N x P, result is M x P.
+    """
+    m = len(matrix_a)
+    n = len(matrix_a[0])
+    p = len(matrix_b[0])
+
+    result = []
+    for i in range(m):
+        new_row = []
+        for j in range(p):
+            total = 0
+            for k in range(n):
+                total += matrix_a[i][k] * matrix_b[k][j]
+            new_row.append(total)
+        result.append(new_row)
+
+    return result
+
+
+def get_dimensions(prompt_rows="Enter number of rows: ", prompt_cols="Enter number of columns: "):
+    """Prompt for and validate positive integer dimensions."""
+    while True:
+        try:
+            rows = int(input(prompt_rows))
+            cols = int(input(prompt_cols))
+            if rows <= 0 or cols <= 0:
+                print("Error: Dimensions must be positive integers.")
+                continue
+            return rows, cols
+        except ValueError:
+            print("Error: Please enter valid integers.")
+
+
+def part_a_transpose():
+    print("\n--- PART A: Transpose a Matrix ---")
+    rows, cols = get_dimensions()
+    matrix = read_matrix(rows, cols)
+
+    display_matrix(matrix, "Original Matrix")
+    result = transpose_matrix(matrix)
+    display_matrix(result, "Transposed Matrix")
+
+
+def part_b_addition():
+    print("\n--- PART B: Add Two Matrices ---")
+    rows, cols = get_dimensions()
+
+    print("\nMatrix A:")
+    matrix_a = read_matrix(rows, cols)
+
+    print("\nMatrix B (must be the same size):")
+    matrix_b = read_matrix(rows, cols)
+
+    display_matrix(matrix_a, "Matrix A")
+    display_matrix(matrix_b, "Matrix B")
+    result = add_matrices(matrix_a, matrix_b)
+    display_matrix(result, "Sum (A + B)")
+
+
+def part_c_multiplication():
+    print("\n--- PART C: Multiply Two Matrices ---")
+    print("Matrix A dimensions (M x N):")
+    m, n = get_dimensions()
+    matrix_a = read_matrix(m, n, " of A")
+
+    print("\nMatrix B dimensions (N x P) — rows must equal N:")
+    n2, p = get_dimensions()
+
+    if n2 != n:
+        print(f"Error: Matrix B must have {n} rows to match Matrix A's columns.")
+        return
+
+    matrix_b = read_matrix(n2, p, " of B")
+
+    display_matrix(matrix_a, "Matrix A")
+    display_matrix(matrix_b, "Matrix B")
+    result = multiply_matrices(matrix_a, matrix_b)
+    display_matrix(result, "Product (A x B)")
+
+
+def main():
+    part_a_transpose()
+    part_b_addition()
+    part_c_multiplication()
+
+
+if __name__ == "__main__":
+    main()

@@ -48,10 +48,63 @@
 #   print an error message and stop.
 # - Each part must be in its own function (see scaffold below).
 # - Complete Part A before attempting Part B.
-#
-
-#
 # =============================================================================
 # YOUR CODE BELOW — remove the # symbols from the scaffold and fill it in
 # =============================================================================
 
+def print_table(number):
+    print(f"\nMultiplication Table for {number}:")
+    for i in range(1, 13):
+        result = number * i
+        print(f"{number}  x  {i:<2} =  {result}")
+
+
+def print_tables_up_to_n(n):
+    for number in range(1, n + 1):
+        print_table(number)
+        print("-" * 29)
+
+
+def get_positive_integer(prompt):
+    value_input = input(prompt)
+
+    try:
+        value = int(value_input)
+    except ValueError:
+        print("Error: Please enter a valid integer.")
+        return None
+
+    if value <= 0:
+        print("Error: Number must be a positive integer.")
+        return None
+
+    return value
+
+
+def part_a():
+    print("--- PART A: Single Table ---")
+    number = get_positive_integer("Enter a number: ")
+
+    if number is None:
+        return
+
+    print_table(number)
+
+
+def part_b():
+    print("\n--- PART B: Tables from 1 to N ---")
+    n = get_positive_integer("Enter N: ")
+
+    if n is None:
+        return
+
+    print_tables_up_to_n(n)
+
+
+def main():
+    part_a()
+    part_b()
+
+
+if __name__ == "__main__":
+    main()
